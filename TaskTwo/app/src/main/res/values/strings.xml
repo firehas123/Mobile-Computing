@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TaskTwo</string>
+    <string name="enter_a_number">Enter a number</string>
+    <string name="submit">Submit</string>
 </resources>
