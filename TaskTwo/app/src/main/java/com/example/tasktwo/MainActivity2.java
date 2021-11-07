@@ -12,12 +12,10 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String value = extras.getString("Num");
-            //setting value
-            tx = findViewById(R.id.DisplayNum);
-            tx.setText("Number you entered was "+value);
-        }
+        tx = findViewById(R.id.DisplayNum);
+        Intent in = getIntent();
+        String s  = in.getStringExtra("Num");
+        tx.setText("Number you entered was "+s);
+
     }
 }

@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent it =  new Intent(MainActivity.this,MainActivity2.class);
-                it.putExtra("Num", Integer.parseInt(tx.getText().toString()));
+                it.putExtra("Num", tx.getText().toString());
                 startActivity(it);
 
             }
