@@ -2,20 +2,36 @@ package com.example.assignmenttwo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btn = findViewById(R.id.NextBtn);
         ArrayList<MyData>  obj = new ArrayList<MyData>();
         //adding the 17 emission points
         addData(obj);
-        // creating intent object
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // creating intent object
+                Intent intent = new Intent(MainActivity.this,OptionScreen.class);
+                intent.putExtra("Data",obj);
+                startActivity(intent);
+            }
+        });
+       
+
 
     }
     public void addData(ArrayList temp){
