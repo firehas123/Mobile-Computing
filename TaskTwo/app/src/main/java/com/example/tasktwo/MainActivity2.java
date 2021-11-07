@@ -16,6 +16,8 @@ public class MainActivity2 extends AppCompatActivity {
         if (extras != null) {
             String value = extras.getString("Num");
             //setting value
+            tx = findViewById(R.id.DisplayNum);
+            tx.setText("Number you entered was "+value);
         }
     }
 }
