@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <EditText
         android:id="@+id/Number"
         android:layout_width="272dp"
         android:layout_height="107dp"
@@ -28,4 +28,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Number" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
