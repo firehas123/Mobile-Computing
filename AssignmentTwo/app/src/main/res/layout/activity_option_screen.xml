@@ -6,4 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".OptionScreen">
 
+    <Button
+        android:id="@+id/buttonP"
+        android:layout_width="212dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="184dp"
+        android:text="Practise"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonE"
+        android:layout_width="202dp"
+        android:layout_height="92dp"
+        android:layout_marginTop="388dp"
+        android:text="Exam"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
