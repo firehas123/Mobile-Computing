@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<MyData>  obj = new ArrayList<MyData>();
         //adding the 17 emission points
         addData(obj);
+        // creating intent object
+
     }
     public void addData(ArrayList temp){
         temp.add(new MyData("أ ة","End of Throat")); //1
@@ -31,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
         temp.add(new MyData("ظ  ذ  ث","Tip of the tongue touching the tip of the frontal 2 teeth")); //12
         temp.add(new MyData("ص ز س","Tip of the tongue comes between the front top and bottom teeth")); //13
         temp.add(new MyData("م ن","While pronouncing the ending sound of  م  or ن , bring the vibration to the nose")); //14
-
-
-
     }
 }
 class MyData{
