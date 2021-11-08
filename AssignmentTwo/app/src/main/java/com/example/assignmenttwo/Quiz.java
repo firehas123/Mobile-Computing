@@ -3,6 +3,7 @@ package com.example.assignmenttwo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,6 +39,15 @@ public class Quiz extends AppCompatActivity {
         option3 = findViewById(R.id.OptionThree);
         option4 = findViewById(R.id.OptionFour);
         submit = findViewById(R.id.Submit);
+        //removing keyboard from popping
+        question.setFocusable(false);
+       //adding options listener
+        option1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                option1.setBackgroundColor(Color.parseColor("#0000FF"));
+            }
+        });
         // creatiing (makhārij al-ḥurūf) arrayList
         ArrayList<MyData>  obj = new ArrayList<MyData>();
         //adding the 17 emission points
@@ -43,22 +55,91 @@ public class Quiz extends AppCompatActivity {
         //fetching values from intent
         Intent intent = getIntent();
         String buttonPressedFromPreviousActivity = intent.getStringExtra("Button");
-        if(buttonPressedFromPreviousActivity.equals("practise")){
+        if(buttonPressedFromPreviousActivity.equals("practise"))
                 marks.setVisibility(View.INVISIBLE);
-        }
+        else
+                marks.setVisibility(View.VISIBLE);
         //fetchnig questions for the exam or practise;
         ArrayList<Question> questions = new ArrayList<Question>();
         ArrayList<Integer> randomMcqNumber = new ArrayList<Integer>();
         fetchQuestions(questions,obj);
         // five questions have been fetched now displaying on the screen
-        int questionNumber = 0;
-        question.setText( "\u202B" +questions.get(questionNumber).ob.word+ "\u202C"+" comes from which location?");
-        int answersIndex = questions.get(questionNumber).index;
+        final int[] questionNumber = {0};
+
+        String temp = null;
+        try {
+            temp = new String(questions.get(questionNumber[0]).ob.word.getBytes(),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        question.setText(   "This letter comes from which location " + "\"" +temp +"\"?");
+        int answersIndex = questions.get(questionNumber[0]).index;
         fetchOptions(answersIndex,randomMcqNumber);
         option3.setText(obj.get(answersIndex).location);
         option1.setText(obj.get(randomMcqNumber.get(0)).location);
         option2.setText(obj.get(randomMcqNumber.get(1)).location);
         option4.setText(obj.get(randomMcqNumber.get(2)).location);
+        questionNumber[0]++;
+        int marksCount = 0;
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if(questionNumber[0]<5) {
+                        //evaluating the answer then replacing the options with the new answers
+                        if(questionNumber[0]==4)
+                            submit.setText("Finish");
+                        //evaluation code
+
+                        //
+                        //replacing code
+                        String arbicText = null;
+                        try {
+                            arbicText = new String(questions.get(questionNumber[0]).ob.word.getBytes(), "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        question.setText("This letter comes from which location " + "\"" + arbicText + "\"?");
+                        int optionWithCorrectAnswer = new Random().nextInt(4);
+                        int answersIndex = questions.get(questionNumber[0]).index;
+                        fetchOptions(answersIndex, randomMcqNumber);
+                        if (optionWithCorrectAnswer == 0) {
+                            option1.setText(obj.get(answersIndex).location);
+                            option2.setText(obj.get(randomMcqNumber.get(0)).location);
+                            option3.setText(obj.get(randomMcqNumber.get(1)).location);
+                            option4.setText(obj.get(randomMcqNumber.get(2)).location);
+                        } else if (optionWithCorrectAnswer == 1) {
+                            option2.setText(obj.get(answersIndex).location);
+                            option1.setText(obj.get(randomMcqNumber.get(0)).location);
+                            option3.setText(obj.get(randomMcqNumber.get(1)).location);
+                            option4.setText(obj.get(randomMcqNumber.get(2)).location);
+                        } else if (optionWithCorrectAnswer == 2) {
+                            option3.setText(obj.get(answersIndex).location);
+                            option2.setText(obj.get(randomMcqNumber.get(0)).location);
+                            option1.setText(obj.get(randomMcqNumber.get(1)).location);
+                            option4.setText(obj.get(randomMcqNumber.get(2)).location);
+                        } else {
+                            option4.setText(obj.get(answersIndex).location);
+                            option2.setText(obj.get(randomMcqNumber.get(0)).location);
+                            option3.setText(obj.get(randomMcqNumber.get(1)).location);
+                            option1.setText(obj.get(randomMcqNumber.get(2)).location);
+                        }
+
+                        questionNumber[0]++;
+                        //
+                    }
+                    else{
+                        // all Five questions have been taken
+                        // if it's practise then take back to optionScreen activity
+                        // if it's Exam then take back to acitivity where they can share their marks
+                        if(intent.getStringExtra("Button").equals("practise")){
+
+                        }
+                        else{
+
+                        }
+                    }
+            }
+        });
     }
 
     private void fetchOptions(int answersIndex, ArrayList<Integer> randomMcqNumber) {
