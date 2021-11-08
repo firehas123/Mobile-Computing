@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +47,36 @@ public class Quiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 option1.setBackgroundColor(Color.parseColor("#0000FF"));
+                option2.setBackgroundColor(Color.parseColor("#000000"));
+                option3.setBackgroundColor(Color.parseColor("#000000"));
+                option4.setBackgroundColor(Color.parseColor("#000000"));
+            }
+        });
+        option2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                option2.setBackgroundColor(Color.parseColor("#0000FF"));
+                option1.setBackgroundColor(Color.parseColor("#000000"));
+                option3.setBackgroundColor(Color.parseColor("#000000"));
+                option4.setBackgroundColor(Color.parseColor("#000000"));
+            }
+        });
+        option3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                option3.setBackgroundColor(Color.parseColor("#0000FF"));
+                option2.setBackgroundColor(Color.parseColor("#000000"));
+                option1.setBackgroundColor(Color.parseColor("#000000"));
+                option4.setBackgroundColor(Color.parseColor("#000000"));
+            }
+        });
+        option4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                option4.setBackgroundColor(Color.parseColor("#0000FF"));
+                option2.setBackgroundColor(Color.parseColor("#000000"));
+                option3.setBackgroundColor(Color.parseColor("#000000"));
+                option1.setBackgroundColor(Color.parseColor("#000000"));
             }
         });
         // creatiing (makhārij al-ḥurūf) arrayList
@@ -84,9 +115,18 @@ public class Quiz extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if(questionNumber[0]<5) {
+                ColorDrawable viewColor1 = (ColorDrawable) option1.getBackground();
+                int colorOption1 = viewColor1.getColor();
+                ColorDrawable viewColor2 = (ColorDrawable) option2.getBackground();
+                int colorOption2 = viewColor2.getColor();
+                ColorDrawable viewColor3 = (ColorDrawable) option3.getBackground();
+                int colorOption3 = viewColor3.getColor();
+                ColorDrawable viewColor4 = (ColorDrawable) option4.getBackground();
+                int colorOption4 = viewColor4.getColor();
+                if() {
+                    if (questionNumber[0] < 5) {
                         //evaluating the answer then replacing the options with the new answers
-                        if(questionNumber[0]==4)
+                        if (questionNumber[0] == 4)
                             submit.setText("Finish");
                         //evaluation code
 
@@ -126,18 +166,17 @@ public class Quiz extends AppCompatActivity {
 
                         questionNumber[0]++;
                         //
-                    }
-                    else{
+                    } else {
                         // all Five questions have been taken
                         // if it's practise then take back to optionScreen activity
                         // if it's Exam then take back to acitivity where they can share their marks
-                        if(intent.getStringExtra("Button").equals("practise")){
+                        if (intent.getStringExtra("Button").equals("practise")) {
 
-                        }
-                        else{
+                        } else {
 
                         }
                     }
+                }
             }
         });
     }
