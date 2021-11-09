@@ -1,7 +1,9 @@
 package com.example.assignmenttwo;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -26,7 +29,13 @@ public class Quiz extends AppCompatActivity {
     TextView option3;
     TextView option4;
     TextView submit;
-
+    boolean isAnyOptionSelectedOrNot = false;
+    boolean optionOneChecked = false;
+    boolean optionTwoChecked = false;
+    boolean optionThreeChecked = false;
+    boolean optionFourChecked = false;
+    String correctAnswer = null;
+    int marksCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +51,16 @@ public class Quiz extends AppCompatActivity {
         submit = findViewById(R.id.Submit);
         //removing keyboard from popping
         question.setFocusable(false);
+        // variable for checking if any button is selected or not?
+        //final boolean[] isAnyOptionSelectedOrNot = {false};
+
        //adding options listener
+        marks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                marks.setText("0/5");
+            }
+        });
         option1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,6 +68,8 @@ public class Quiz extends AppCompatActivity {
                 option2.setBackgroundColor(Color.parseColor("#000000"));
                 option3.setBackgroundColor(Color.parseColor("#000000"));
                 option4.setBackgroundColor(Color.parseColor("#000000"));
+                isAnyOptionSelectedOrNot =true;
+                optionOneChecked = true;
             }
         });
         option2.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +79,8 @@ public class Quiz extends AppCompatActivity {
                 option1.setBackgroundColor(Color.parseColor("#000000"));
                 option3.setBackgroundColor(Color.parseColor("#000000"));
                 option4.setBackgroundColor(Color.parseColor("#000000"));
+                isAnyOptionSelectedOrNot =true;
+                optionTwoChecked = true;
             }
         });
         option3.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +90,8 @@ public class Quiz extends AppCompatActivity {
                 option2.setBackgroundColor(Color.parseColor("#000000"));
                 option1.setBackgroundColor(Color.parseColor("#000000"));
                 option4.setBackgroundColor(Color.parseColor("#000000"));
+                isAnyOptionSelectedOrNot =true;
+                optionThreeChecked = true;
             }
         });
         option4.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +101,12 @@ public class Quiz extends AppCompatActivity {
                 option2.setBackgroundColor(Color.parseColor("#000000"));
                 option3.setBackgroundColor(Color.parseColor("#000000"));
                 option1.setBackgroundColor(Color.parseColor("#000000"));
+                isAnyOptionSelectedOrNot =true;
+                optionFourChecked = true;
             }
         });
         // creatiing (makhārij al-ḥurūf) arrayList
-        ArrayList<MyData>  obj = new ArrayList<MyData>();
+        ArrayList<MyData>  obj = new ArrayList<MyData>(); //will store all the emission points
         //adding the 17 emission points
         addData(obj);
         //fetching values from intent
@@ -93,11 +119,10 @@ public class Quiz extends AppCompatActivity {
         //fetchnig questions for the exam or practise;
         ArrayList<Question> questions = new ArrayList<Question>();
         ArrayList<Integer> randomMcqNumber = new ArrayList<Integer>();
-        fetchQuestions(questions,obj);
-        // five questions have been fetched now displaying on the screen
-        final int[] questionNumber = {0};
+        fetchQuestions(questions,obj);// five questions have been fetched now displaying on the screen
+        final int[] questionNumber = {0}; //count of questions
 
-        String temp = null;
+        String temp = null; // for displaying arabic text
         try {
             temp = new String(questions.get(questionNumber[0]).ob.word.getBytes(),"UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -106,12 +131,13 @@ public class Quiz extends AppCompatActivity {
         question.setText(   "This letter comes from which location " + "\"" +temp +"\"?");
         int answersIndex = questions.get(questionNumber[0]).index;
         fetchOptions(answersIndex,randomMcqNumber);
+        correctAnswer = obj.get(answersIndex).location;
         option3.setText(obj.get(answersIndex).location);
         option1.setText(obj.get(randomMcqNumber.get(0)).location);
         option2.setText(obj.get(randomMcqNumber.get(1)).location);
         option4.setText(obj.get(randomMcqNumber.get(2)).location);
         questionNumber[0]++;
-        int marksCount = 0;
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,13 +149,31 @@ public class Quiz extends AppCompatActivity {
                 int colorOption3 = viewColor3.getColor();
                 ColorDrawable viewColor4 = (ColorDrawable) option4.getBackground();
                 int colorOption4 = viewColor4.getColor();
-                if() {
+                if(isAnyOptionSelectedOrNot == true) {
                     if (questionNumber[0] < 5) {
                         //evaluating the answer then replacing the options with the new answers
                         if (questionNumber[0] == 4)
                             submit.setText("Finish");
                         //evaluation code
-
+                            //checking which option is ticked
+                            if(optionOneChecked){
+                                if(option1.getText().equals(correctAnswer)){
+                                    marksCount++;
+                                }
+                                else { //incorrect option
+                                    //displaying alert box
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+                                    alertDialogBuilder.setMessage("Correct option was ");
+                                            alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface arg0, int arg1) {
+                                                            Toast.makeText(Quiz.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
+                                    AlertDialog alertDialog = alertDialogBuilder.create();
+                                    alertDialog.show();
+                                }
+                            }
                         //
                         //replacing code
                         String arbicText = null;
@@ -165,7 +209,8 @@ public class Quiz extends AppCompatActivity {
                         }
 
                         questionNumber[0]++;
-                        //
+                        //setting marks
+                        marks.setText(Integer.toString(marksCount) + "/5");
                     } else {
                         // all Five questions have been taken
                         // if it's practise then take back to optionScreen activity
@@ -176,10 +221,25 @@ public class Quiz extends AppCompatActivity {
 
                         }
                     }
+
+                    resetColour(option1,option2,option3,option4);
+                    isAnyOptionSelectedOrNot=false;
+                }
+                else{
+                    Toast myToast = Toast.makeText(getApplicationContext(), "Please select an option", Toast.LENGTH_LONG);
+                    myToast.show();
                 }
             }
         });
     }
+
+    private void resetColour(TextView option1, TextView option2, TextView option3, TextView option4) {
+        option4.setBackgroundColor(Color.parseColor("#000000"));
+        option2.setBackgroundColor(Color.parseColor("#000000"));
+        option3.setBackgroundColor(Color.parseColor("#000000"));
+        option1.setBackgroundColor(Color.parseColor("#000000"));
+    }
+
 
     private void fetchOptions(int answersIndex, ArrayList<Integer> randomMcqNumber) {
         int temp = 0;
