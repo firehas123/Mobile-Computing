@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Quiz extends AppCompatActivity {
-    //obects
+    //objects and variables
     EditText question;
     TextView marks;
     TextView option1;
@@ -29,14 +30,14 @@ public class Quiz extends AppCompatActivity {
     TextView option3;
     TextView option4;
     TextView submit;
-    boolean isAnyOptionSelectedOrNot = false;
-    boolean optionOneChecked = false;
-    boolean optionTwoChecked = false;
-    boolean optionThreeChecked = false;
-    boolean optionFourChecked = false;
-    String correctAnswer = null;
     int marksCount = 0;
-
+    int questionNumber = 0;
+    int optionWithCorrectAnswer = 3;
+    ArrayList<MyData>  Data = new ArrayList<MyData>(); //will store all the emission points
+    ArrayList<Question> questions = new ArrayList<Question>(); //will store all five questions to be asked
+    ArrayList<Integer> randomMcqNumber = new ArrayList<Integer>(); // random option for 1 mcq only
+    boolean examButtonPressed = false;
+    boolean isAnyOptionSelectedOrNot = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,188 +50,247 @@ public class Quiz extends AppCompatActivity {
         option3 = findViewById(R.id.OptionThree);
         option4 = findViewById(R.id.OptionFour);
         submit = findViewById(R.id.Submit);
-        //removing keyboard from popping
+        //removing keyboard from popping up in this activity
         question.setFocusable(false);
-        // variable for checking if any button is selected or not?
-        //final boolean[] isAnyOptionSelectedOrNot = {false};
-
-       //adding options listener
-        marks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                marks.setText("0/5");
-            }
-        });
-        option1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                option1.setBackgroundColor(Color.parseColor("#0000FF"));
-                option2.setBackgroundColor(Color.parseColor("#000000"));
-                option3.setBackgroundColor(Color.parseColor("#000000"));
-                option4.setBackgroundColor(Color.parseColor("#000000"));
-                isAnyOptionSelectedOrNot =true;
-                optionOneChecked = true;
-            }
-        });
-        option2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                option2.setBackgroundColor(Color.parseColor("#0000FF"));
-                option1.setBackgroundColor(Color.parseColor("#000000"));
-                option3.setBackgroundColor(Color.parseColor("#000000"));
-                option4.setBackgroundColor(Color.parseColor("#000000"));
-                isAnyOptionSelectedOrNot =true;
-                optionTwoChecked = true;
-            }
-        });
-        option3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                option3.setBackgroundColor(Color.parseColor("#0000FF"));
-                option2.setBackgroundColor(Color.parseColor("#000000"));
-                option1.setBackgroundColor(Color.parseColor("#000000"));
-                option4.setBackgroundColor(Color.parseColor("#000000"));
-                isAnyOptionSelectedOrNot =true;
-                optionThreeChecked = true;
-            }
-        });
-        option4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                option4.setBackgroundColor(Color.parseColor("#0000FF"));
-                option2.setBackgroundColor(Color.parseColor("#000000"));
-                option3.setBackgroundColor(Color.parseColor("#000000"));
-                option1.setBackgroundColor(Color.parseColor("#000000"));
-                isAnyOptionSelectedOrNot =true;
-                optionFourChecked = true;
-            }
-        });
-        // creatiing (makhārij al-ḥurūf) arrayList
-        ArrayList<MyData>  obj = new ArrayList<MyData>(); //will store all the emission points
+        //code start
         //adding the 17 emission points
-        addData(obj);
+        addData(Data);
         //fetching values from intent
         Intent intent = getIntent();
         String buttonPressedFromPreviousActivity = intent.getStringExtra("Button");
-        if(buttonPressedFromPreviousActivity.equals("practise"))
-                marks.setVisibility(View.INVISIBLE);
-        else
-                marks.setVisibility(View.VISIBLE);
-        //fetchnig questions for the exam or practise;
-        ArrayList<Question> questions = new ArrayList<Question>();
-        ArrayList<Integer> randomMcqNumber = new ArrayList<Integer>();
-        fetchQuestions(questions,obj);// five questions have been fetched now displaying on the screen
-        final int[] questionNumber = {0}; //count of questions
-
-        String temp = null; // for displaying arabic text
-        try {
-            temp = new String(questions.get(questionNumber[0]).ob.word.getBytes(),"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if(buttonPressedFromPreviousActivity.equals("practise")){
+            marks.setVisibility(View.INVISIBLE);
+            examButtonPressed = false;
         }
-        question.setText(   "This letter comes from which location " + "\"" +temp +"\"?");
-        int answersIndex = questions.get(questionNumber[0]).index;
-        fetchOptions(answersIndex,randomMcqNumber);
-        correctAnswer = obj.get(answersIndex).location;
-        option3.setText(obj.get(answersIndex).location);
-        option1.setText(obj.get(randomMcqNumber.get(0)).location);
-        option2.setText(obj.get(randomMcqNumber.get(1)).location);
-        option4.setText(obj.get(randomMcqNumber.get(2)).location);
-        questionNumber[0]++;
+
+        else { // meaning exam button was pressed
+            marks.setVisibility(View.VISIBLE);
+            examButtonPressed = true;
+        }
+        //fetching questions for the exam or practise;
+        fetchQuestions(questions,Data);
+        // now i need to select random options for mcq 1 then display it
+        //getting indexes of random options
+        fetchOptions(questions.get(questionNumber).index,randomMcqNumber);
+        //displaying first mcq manually
+        question.setText("This letter comes from which location " + questions.get(questionNumber).ob.word + " ?");
+        option1.setText(Data.get(randomMcqNumber.get(0)).location);
+        option2.setText(Data.get(randomMcqNumber.get(1)).location);
+        option3.setText(Data.get(questions.get(questionNumber).index).location);
+        option4.setText(Data.get(randomMcqNumber.get(2)).location);
+        marks.setText("0/5");
+        questionNumber++;
+        //event handle of all the options
+        option1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isAnyOptionSelectedOrNot){
+                    //option selected
+                    isAnyOptionSelectedOrNot = true;
+                    option1.setBackgroundColor(Color.parseColor("#0000FF"));
+                    option2.setBackgroundColor(Color.parseColor("#000000"));
+                    option3.setBackgroundColor(Color.parseColor("#000000"));
+                    option4.setBackgroundColor(Color.parseColor("#000000"));
+                    // checking if the selected option is corrected or not?
+                    String correctAnswer = Data.get(questions.get(questionNumber-1).index).location;
+                    if(option1.getText().equals(correctAnswer)){
+                        //meaning correct option was selected
+                        option1.setBackgroundColor(Color.parseColor("#00FF00"));
+                        //increase marks
+                        marksCount++;
+                    }
+                    else{
+                        //wrong option was selected
+                        if(option2.getText().equals(correctAnswer)){
+                            option1.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option2.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+                        else if(option3.getText().equals(correctAnswer)){
+                            option1.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option3.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+                        else{
+                            option1.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option4.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+                    }
+                }
+            }
+        });
+
+        option2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isAnyOptionSelectedOrNot) {
+                    //option selected
+                    isAnyOptionSelectedOrNot = true;
+                    option2.setBackgroundColor(Color.parseColor("#0000FF"));
+                    option1.setBackgroundColor(Color.parseColor("#000000"));
+                    option3.setBackgroundColor(Color.parseColor("#000000"));
+                    option4.setBackgroundColor(Color.parseColor("#000000"));
+                    // checking if the selected option is corrected or not?
+                    String correctAnswer = Data.get(questions.get(questionNumber-1).index).location;
+                    if (option2.getText().equals(correctAnswer)) {
+                        //meaning correct option was selected
+                        option2.setBackgroundColor(Color.parseColor("#00FF00"));
+                        marksCount++;
+                    } else {
+                        //wrong option was selected
+                        if (option1.getText().equals(correctAnswer)) {
+                            option2.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option1.setBackgroundColor(Color.parseColor("#00FF00"));
+                        } else if (option3.getText().equals(correctAnswer)) {
+                            option2.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option3.setBackgroundColor(Color.parseColor("#00FF00"));
+                        } else {
+                            option2.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option4.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+                    }
+                }
+            }
+        });
+
+        option3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isAnyOptionSelectedOrNot) {
+                    //option selected
+                    isAnyOptionSelectedOrNot = true;
+                    option3.setBackgroundColor(Color.parseColor("#0000FF"));
+                    option2.setBackgroundColor(Color.parseColor("#000000"));
+                    option1.setBackgroundColor(Color.parseColor("#000000"));
+                    option4.setBackgroundColor(Color.parseColor("#000000"));
+                    // checking if the selected option is corrected or not?
+                    String correctAnswer = Data.get(questions.get(questionNumber-1).index).location;
+                    if (option3.getText().equals(correctAnswer)) {
+                        //meaning correct option was selected
+                        option3.setBackgroundColor(Color.parseColor("#00FF00"));
+                        marksCount++;
+                    } else {
+                        //wrong option was selected
+                        if (option2.getText().equals(correctAnswer)) {
+                            option3.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option2.setBackgroundColor(Color.parseColor("#00FF00"));
+                        } else if (option1.getText().equals(correctAnswer)) {
+                            option3.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option1.setBackgroundColor(Color.parseColor("#00FF00"));
+                        } else {
+                            option3.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option4.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+                    }
+                }
+            }
+        });
+
+        option4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isAnyOptionSelectedOrNot) {
+                    //option selected
+                    isAnyOptionSelectedOrNot = true;
+                    option4.setBackgroundColor(Color.parseColor("#0000FF"));
+                    option2.setBackgroundColor(Color.parseColor("#000000"));
+                    option3.setBackgroundColor(Color.parseColor("#000000"));
+                    option1.setBackgroundColor(Color.parseColor("#000000"));
+                    // checking if the selected option is corrected or not?
+                    String correctAnswer = Data.get(questions.get(questionNumber-1).index).location;
+                    if (option4.getText().equals(correctAnswer)) {
+                        //meaning correct option was selected
+                        option4.setBackgroundColor(Color.parseColor("#00FF00"));
+                        marksCount++;
+                    } else {
+                        //wrong option was selected
+                        if (option2.getText().equals(correctAnswer)) {
+                            option4.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option2.setBackgroundColor(Color.parseColor("#00FF00"));
+                        } else if (option3.getText().equals(correctAnswer)) {
+                            option4.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option3.setBackgroundColor(Color.parseColor("#00FF00"));
+                        } else {
+                            option4.setBackgroundColor(Color.parseColor("#FF0000"));
+                            option1.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
+                    }
+                }
+            }
+        });
+
+        //event handler of the next button
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ColorDrawable viewColor1 = (ColorDrawable) option1.getBackground();
-                int colorOption1 = viewColor1.getColor();
-                ColorDrawable viewColor2 = (ColorDrawable) option2.getBackground();
-                int colorOption2 = viewColor2.getColor();
-                ColorDrawable viewColor3 = (ColorDrawable) option3.getBackground();
-                int colorOption3 = viewColor3.getColor();
-                ColorDrawable viewColor4 = (ColorDrawable) option4.getBackground();
-                int colorOption4 = viewColor4.getColor();
-                if(isAnyOptionSelectedOrNot == true) {
-                    if (questionNumber[0] < 5) {
-                        //evaluating the answer then replacing the options with the new answers
-                        if (questionNumber[0] == 4)
+                //first checking is any option selected or not?
+                if(isAnyOptionSelectedOrNot) {
+                    if(questionNumber< 5){
+                        if (questionNumber == 4)
                             submit.setText("Finish");
-                        //evaluation code
-                            //checking which option is ticked
-                            if(optionOneChecked){
-                                if(option1.getText().equals(correctAnswer)){
-                                    marksCount++;
-                                }
-                                else { //incorrect option
-                                    //displaying alert box
-                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                                    alertDialogBuilder.setMessage("Correct option was ");
-                                            alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface arg0, int arg1) {
-                                                            Toast.makeText(Quiz.this,"You clicked yes button",Toast.LENGTH_LONG).show();
-                                                        }
-                                                    });
-                                    AlertDialog alertDialog = alertDialogBuilder.create();
-                                    alertDialog.show();
-                                }
-                            }
-                        //
-                        //replacing code
-                        String arbicText = null;
-                        try {
-                            arbicText = new String(questions.get(questionNumber[0]).ob.word.getBytes(), "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        question.setText("This letter comes from which location " + "\"" + arbicText + "\"?");
-                        int optionWithCorrectAnswer = new Random().nextInt(4);
-                        int answersIndex = questions.get(questionNumber[0]).index;
-                        fetchOptions(answersIndex, randomMcqNumber);
+                        //replacing the text with the new one
+                        //Then we need to extract options randomly
+                        fetchOptions(questions.get(questionNumber).index, randomMcqNumber);
+                        //now replacing the question
+                        question.setText("This letter comes from which location " + questions.get(questionNumber).ob.word + " ?");
+                        //now replacing the options
+                        optionWithCorrectAnswer = new Random().nextInt(4);
+                        int answersIndex = questions.get(questionNumber).index;
+
                         if (optionWithCorrectAnswer == 0) {
-                            option1.setText(obj.get(answersIndex).location);
-                            option2.setText(obj.get(randomMcqNumber.get(0)).location);
-                            option3.setText(obj.get(randomMcqNumber.get(1)).location);
-                            option4.setText(obj.get(randomMcqNumber.get(2)).location);
+                            option1.setText(Data.get(answersIndex).location);
+                            option2.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option3.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option4.setText(Data.get(randomMcqNumber.get(2)).location);
                         } else if (optionWithCorrectAnswer == 1) {
-                            option2.setText(obj.get(answersIndex).location);
-                            option1.setText(obj.get(randomMcqNumber.get(0)).location);
-                            option3.setText(obj.get(randomMcqNumber.get(1)).location);
-                            option4.setText(obj.get(randomMcqNumber.get(2)).location);
+                            option2.setText(Data.get(answersIndex).location);
+                            option1.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option3.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option4.setText(Data.get(randomMcqNumber.get(2)).location);
                         } else if (optionWithCorrectAnswer == 2) {
-                            option3.setText(obj.get(answersIndex).location);
-                            option2.setText(obj.get(randomMcqNumber.get(0)).location);
-                            option1.setText(obj.get(randomMcqNumber.get(1)).location);
-                            option4.setText(obj.get(randomMcqNumber.get(2)).location);
+                            option3.setText(Data.get(answersIndex).location);
+                            option2.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option1.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option4.setText(Data.get(randomMcqNumber.get(2)).location);
                         } else {
-                            option4.setText(obj.get(answersIndex).location);
-                            option2.setText(obj.get(randomMcqNumber.get(0)).location);
-                            option3.setText(obj.get(randomMcqNumber.get(1)).location);
-                            option1.setText(obj.get(randomMcqNumber.get(2)).location);
+                            option4.setText(Data.get(answersIndex).location);
+                            option2.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option3.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option1.setText(Data.get(randomMcqNumber.get(2)).location);
                         }
 
-                        questionNumber[0]++;
-                        //setting marks
-                        marks.setText(Integer.toString(marksCount) + "/5");
-                    } else {
+                        // marks text field code
+                        marks.setText(Integer.toString(marksCount)+ "/5");
+
+                        questionNumber++; // count of questions
+                        //resetting all the colours to default
+                        resetColour(option1,option2,option3,option4);
+                        isAnyOptionSelectedOrNot = false;
+                    }
+                    else{
                         // all Five questions have been taken
                         // if it's practise then take back to optionScreen activity
-                        // if it's Exam then take back to acitivity where they can share their marks
-                        if (intent.getStringExtra("Button").equals("practise")) {
+                        // if it's Exam then take back to activity where they can share their marks
 
+                        if (examButtonPressed) {
+                            //meaning user probably wants to share his answer hence go to share activity
+                            Intent intent = new Intent(Quiz.this,Share.class);
+                            intent.putExtra("Marks",Integer.toString(marksCount));
+                            startActivity(intent);
                         } else {
-
+                                //return to home screen
+                            Intent intent = new Intent(Quiz.this,MainActivity.class);
+                            startActivity(intent);
                         }
                     }
-
-                    resetColour(option1,option2,option3,option4);
-                    isAnyOptionSelectedOrNot=false;
                 }
                 else{
+                    //no option was selected
                     Toast myToast = Toast.makeText(getApplicationContext(), "Please select an option", Toast.LENGTH_LONG);
                     myToast.show();
                 }
             }
         });
+
     }
 
     private void resetColour(TextView option1, TextView option2, TextView option3, TextView option4) {
@@ -239,7 +299,6 @@ public class Quiz extends AppCompatActivity {
         option3.setBackgroundColor(Color.parseColor("#000000"));
         option1.setBackgroundColor(Color.parseColor("#000000"));
     }
-
 
     private void fetchOptions(int answersIndex, ArrayList<Integer> randomMcqNumber) {
         int temp = 0;
@@ -254,13 +313,13 @@ public class Quiz extends AppCompatActivity {
         }
     }
 
-    private void fetchQuestions(ArrayList<Question> questions, ArrayList<MyData> obj) {
-        int temp = 0;
-        while(questions.size()<5){
+    private void fetchQuestions(ArrayList<Question> questions, ArrayList<MyData> data) {
+        int temp = 0; // for index of the data arraylist
+        while(questions.size()<5){ //fetching all 5 questions to be asked
             temp = new Random().nextInt(14);
-            if(!(questions.contains(new Question(obj.get(temp),temp)))){
+            if(!(questions.contains(new Question(data.get(temp),temp)))){
                 //add it to question
-                questions.add(new Question(obj.get(temp),temp));
+                questions.add(new Question(data.get(temp),temp));
             }
         }
     }
