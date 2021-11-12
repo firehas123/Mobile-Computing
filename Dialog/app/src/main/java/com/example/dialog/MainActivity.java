@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int asdf)
                             {
-                                finish();
+                                //do nothin
                             }
                         });
                 builder.setNegativeButton(
