@@ -13,10 +13,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //code for writing dialog box
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Message you want to show");
-        alertDialogBuilder.setTitle("Alert !");
-        alertDialogBuilder.setCancelable(false);
-        
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("It is message");
+        builder.setTitle("Title");
+        builder.setCancelable(false);
+        builder.setPositiveButton(
+                "Positive Button",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int asdf)
+                    {
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(
+                "Negative Button",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
