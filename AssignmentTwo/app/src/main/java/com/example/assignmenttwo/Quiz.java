@@ -31,6 +31,7 @@ public class Quiz extends AppCompatActivity {
     TextView option3;
     TextView option4;
     TextView submit;
+    TextView testing;
     int marksCount = 0;
     int questionNumber = 0;
     int optionWithCorrectAnswer = 3;
@@ -51,6 +52,9 @@ public class Quiz extends AppCompatActivity {
         option3 = findViewById(R.id.OptionThree);
         option4 = findViewById(R.id.OptionFour);
         submit = findViewById(R.id.Submit);
+                //delete code
+        testing = findViewById(R.id.Testing);
+                // delete code
         //removing keyboard from popping up in this activity
         question.setFocusable(false);
         //code start
@@ -79,7 +83,11 @@ public class Quiz extends AppCompatActivity {
         option2.setText(Data.get(randomMcqNumber.get(1)).location);
         option3.setText(Data.get(questions.get(questionNumber).index).location);
         option4.setText(Data.get(randomMcqNumber.get(2)).location);
+        if(savedInstanceState==null)
         marks.setText("0/5");
+        else{
+            marks.setText(savedInstanceState.get("MarksSaved").toString());
+        }
         questionNumber++;
         //event handle of all the options
         option1.setOnClickListener(new View.OnClickListener() {
@@ -303,7 +311,7 @@ public class Quiz extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        marksCount = Integer.getInteger(savedInstanceState.get("MarksSaved").toString());
+        marks.setText(savedInstanceState.get("MarksSaved").toString());
     }
 
     private void resetColour(TextView option1, TextView option2, TextView option3, TextView option4) {
