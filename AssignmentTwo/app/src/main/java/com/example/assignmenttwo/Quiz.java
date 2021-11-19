@@ -1,5 +1,6 @@
 package com.example.assignmenttwo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -291,6 +292,18 @@ public class Quiz extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("MarksSaved",marks.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        marksCount = Integer.getInteger(savedInstanceState.get("MarksSaved").toString());
     }
 
     private void resetColour(TextView option1, TextView option2, TextView option3, TextView option4) {
