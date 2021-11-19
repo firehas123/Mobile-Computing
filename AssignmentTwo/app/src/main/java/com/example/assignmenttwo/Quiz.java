@@ -72,19 +72,21 @@ public class Quiz extends AppCompatActivity {
             marks.setVisibility(View.VISIBLE);
             examButtonPressed = true;
         }
-        //fetching questions for the exam or practise;
-        fetchQuestions(questions,Data);
-        // now i need to select random options for mcq 1 then display it
-        //getting indexes of random options
-        fetchOptions(questions.get(questionNumber).index,randomMcqNumber);
-        //displaying first mcq manually
-        question.setText("This letter comes from which location " + questions.get(questionNumber).ob.word + " ?");
-        option1.setText(Data.get(randomMcqNumber.get(0)).location);
-        option2.setText(Data.get(randomMcqNumber.get(1)).location);
-        option3.setText(Data.get(questions.get(questionNumber).index).location);
-        option4.setText(Data.get(randomMcqNumber.get(2)).location);
-        if(savedInstanceState==null)
-        marks.setText("0/5");
+        if(savedInstanceState==null) {
+            //fetching questions for the exam or practise;
+            fetchQuestions(questions, Data);
+            // now i need to select random options for mcq 1 then display it
+            //getting indexes of random options
+            fetchOptions(questions.get(questionNumber).index, randomMcqNumber);
+            //displaying first mcq manually
+            question.setText("This letter comes from which location " + questions.get(questionNumber).ob.word + " ?");
+            option1.setText(Data.get(randomMcqNumber.get(0)).location);
+            option2.setText(Data.get(randomMcqNumber.get(1)).location);
+            option3.setText(Data.get(questions.get(questionNumber).index).location);
+            option4.setText(Data.get(randomMcqNumber.get(2)).location);
+
+            marks.setText("0/5");
+        }
         else{
             marks.setText(savedInstanceState.get("MarksSaved").toString());
         }
@@ -305,7 +307,9 @@ public class Quiz extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        //saving state which are required
         outState.putString("MarksSaved",marks.getText().toString());
+
     }
 
     @Override
