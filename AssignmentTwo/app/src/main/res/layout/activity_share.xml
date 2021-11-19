@@ -10,11 +10,12 @@
         android:id="@+id/Output"
         android:layout_width="281dp"
         android:layout_height="56dp"
-        android:layout_marginTop="120dp"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.155" />
 
     <Button
         android:id="@+id/button"
@@ -22,10 +23,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="148dp"
         android:text="Share"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.798"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Output" />
+        app:layout_constraintTop_toBottomOf="@+id/Output"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button2"
@@ -33,8 +36,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="148dp"
         android:text="Home"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.201"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Output" />
+        app:layout_constraintTop_toBottomOf="@+id/Output"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
