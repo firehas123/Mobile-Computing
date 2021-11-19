@@ -32,7 +32,7 @@ public class Quiz extends AppCompatActivity {
     TextView option2;
     TextView option3;
     TextView option4;
-
+    TextView submit;
     TextView testing;
     int marksCount = 0;
     int questionNumber = 0;
@@ -53,8 +53,10 @@ public class Quiz extends AppCompatActivity {
         option2 = findViewById(R.id.OptionTwo);
         option3 = findViewById(R.id.OptionThree);
         option4 = findViewById(R.id.OptionFour);
-
-                
+        submit = findViewById(R.id.Submit);
+                //delete code
+        testing = findViewById(R.id.Testing);
+                // delete code
         //removing keyboard from popping up in this activity
         question.setFocusable(false);
         //code start
@@ -84,21 +86,20 @@ public class Quiz extends AppCompatActivity {
             option2.setText(Data.get(randomMcqNumber.get(1)).location);
             option3.setText(Data.get(questions.get(questionNumber).index).location);
             option4.setText(Data.get(randomMcqNumber.get(2)).location);
-
+            questionNumber++;
             marks.setText("0/5");
         }
         else{
             marks.setText(savedInstanceState.get("MarksSaved").toString());
             marksCount = savedInstanceState.getInt("MarksInt");
             questionNumber = savedInstanceState.getInt("QuestionNumber");
-            questions = savedInstanceState.getParcelableArrayList("questions");
+              questions = savedInstanceState.getParcelableArrayList("questions");
         }
-        questionNumber++;
+
         //event handle of all the options
         option1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(!isAnyOptionSelectedOrNot){
                     //option selected
                     isAnyOptionSelectedOrNot = true;
@@ -130,7 +131,6 @@ public class Quiz extends AppCompatActivity {
                         }
                     }
                 }
-                nextQuestion();
             }
         });
 
@@ -164,7 +164,6 @@ public class Quiz extends AppCompatActivity {
                         }
                     }
                 }
-                nextQuestion();
             }
         });
 
@@ -198,7 +197,6 @@ public class Quiz extends AppCompatActivity {
                         }
                     }
                 }
-                nextQuestion();
             }
         });
 
@@ -232,75 +230,82 @@ public class Quiz extends AppCompatActivity {
                         }
                     }
                 }
-                nextQuestion();
             }
         });
 
         //event handler of the next button
 
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //first checking is any option selected or not?
+                if(isAnyOptionSelectedOrNot) {
+                    if(questionNumber< 5){
+                        if (questionNumber == 4)
+                            submit.setText("Finish");
+                        //replacing the text with the new one
+                        //Then we need to extract options randomly
+                        fetchOptions(questions.get(questionNumber).index, randomMcqNumber);
+                        //now replacing the question
+                        question.setText("This letter comes from which location " + questions.get(questionNumber).ob.word + " ?");
+                        //now replacing the options
+                        optionWithCorrectAnswer = new Random().nextInt(4);
+                        int answersIndex = questions.get(questionNumber).index;
 
+                        if (optionWithCorrectAnswer == 0) {
+                            option1.setText(Data.get(answersIndex).location);
+                            option2.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option3.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option4.setText(Data.get(randomMcqNumber.get(2)).location);
+                        } else if (optionWithCorrectAnswer == 1) {
+                            option2.setText(Data.get(answersIndex).location);
+                            option1.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option3.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option4.setText(Data.get(randomMcqNumber.get(2)).location);
+                        } else if (optionWithCorrectAnswer == 2) {
+                            option3.setText(Data.get(answersIndex).location);
+                            option2.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option1.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option4.setText(Data.get(randomMcqNumber.get(2)).location);
+                        } else {
+                            option4.setText(Data.get(answersIndex).location);
+                            option2.setText(Data.get(randomMcqNumber.get(0)).location);
+                            option3.setText(Data.get(randomMcqNumber.get(1)).location);
+                            option1.setText(Data.get(randomMcqNumber.get(2)).location);
+                        }
 
-    }
+                        // marks text field code
+                        marks.setText(Integer.toString(marksCount)+ "/5");
 
-    private void nextQuestion() {
-        //first checking is any option selected or not?
+                        questionNumber++; // count of questions
+                        //resetting all the colours to default
+                        resetColour(option1,option2,option3,option4);
+                        isAnyOptionSelectedOrNot = false;
+                    }
+                    else{
+                        // all Five questions have been taken
+                        // if it's practise then take back to optionScreen activity
+                        // if it's Exam then take back to activity where they can share their marks
 
-        if(questionNumber< 5){
-            //replacing the text with the new one
-            //Then we need to extract options randomly
-            fetchOptions(questions.get(questionNumber).index, randomMcqNumber);
-            //now replacing the question
-            question.setText("This letter comes from which location " + questions.get(questionNumber).ob.word + " ?");
-            //now replacing the options
-            optionWithCorrectAnswer = new Random().nextInt(4);
-            int answersIndex = questions.get(questionNumber).index;
-
-            if (optionWithCorrectAnswer == 0) {
-                option1.setText(Data.get(answersIndex).location);
-                option2.setText(Data.get(randomMcqNumber.get(0)).location);
-                option3.setText(Data.get(randomMcqNumber.get(1)).location);
-                option4.setText(Data.get(randomMcqNumber.get(2)).location);
-            } else if (optionWithCorrectAnswer == 1) {
-                option2.setText(Data.get(answersIndex).location);
-                option1.setText(Data.get(randomMcqNumber.get(0)).location);
-                option3.setText(Data.get(randomMcqNumber.get(1)).location);
-                option4.setText(Data.get(randomMcqNumber.get(2)).location);
-            } else if (optionWithCorrectAnswer == 2) {
-                option3.setText(Data.get(answersIndex).location);
-                option2.setText(Data.get(randomMcqNumber.get(0)).location);
-                option1.setText(Data.get(randomMcqNumber.get(1)).location);
-                option4.setText(Data.get(randomMcqNumber.get(2)).location);
-            } else {
-                option4.setText(Data.get(answersIndex).location);
-                option2.setText(Data.get(randomMcqNumber.get(0)).location);
-                option3.setText(Data.get(randomMcqNumber.get(1)).location);
-                option1.setText(Data.get(randomMcqNumber.get(2)).location);
+                        if (examButtonPressed) {
+                            //meaning user probably wants to share his answer hence go to share activity
+                            Intent intent = new Intent(Quiz.this,Share.class);
+                            intent.putExtra("Marks",Integer.toString(marksCount));
+                            startActivity(intent);
+                        } else {
+                                //return to home screen
+                            Intent intent = new Intent(Quiz.this,MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+                else{
+                    //no option was selected
+                    Toast myToast = Toast.makeText(getApplicationContext(), "Please select an option", Toast.LENGTH_LONG);
+                    myToast.show();
+                }
             }
-
-            // marks text field code
-            marks.setText(Integer.toString(marksCount)+ "/5");
-
-            questionNumber++; // count of questions
-            //resetting all the colours to default
-            resetColour(option1,option2,option3,option4);
-            isAnyOptionSelectedOrNot = false;
-        }
-        else{
-            // all Five questions have been taken
-            // if it's practise then take back to optionScreen activity
-            // if it's Exam then take back to activity where they can share their marks
-
-            if (examButtonPressed) {
-                //meaning user probably wants to share his answer hence go to share activity
-                Intent intent = new Intent(Quiz.this,Share.class);
-                intent.putExtra("Marks",Integer.toString(marksCount));
-                startActivity(intent);
-            } else {
-                //return to home screen
-                Intent intent = new Intent(Quiz.this,MainActivity.class);
-                startActivity(intent);
-            }
-        }
+        });
 
     }
 
@@ -311,7 +316,7 @@ public class Quiz extends AppCompatActivity {
         outState.putString("MarksSaved",marks.getText().toString()); //marks text box
         outState.putInt("MarksInt",marksCount); // integer marks count
         outState.putInt("QuestionNumber",questionNumber); // count of question number stored
-        outState.putParcelableArrayList("questions",questions); //saving the total questions
+        outState.putSerializable("questions",questions); //saving the total questions
 
 
     }
