@@ -42,6 +42,7 @@ public class Quiz extends AppCompatActivity {
     ArrayList<Integer> randomMcqNumber = new ArrayList<Integer>(); // random option for 1 mcq only
     boolean examButtonPressed = false;
     boolean isAnyOptionSelectedOrNot = false;
+    boolean mcqCorrect = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +94,12 @@ public class Quiz extends AppCompatActivity {
             marks.setText(savedInstanceState.get("MarksSaved").toString());
             marksCount = savedInstanceState.getInt("MarksInt");
             questionNumber = savedInstanceState.getInt("QuestionNumber");
-              questions = savedInstanceState.getParcelableArrayList("questions");
+            questions = savedInstanceState.getParcelableArrayList("questions");
+            randomMcqNumber = savedInstanceState.getIntegerArrayList("RMN"); //RandomeMcqNumber
+            option1.setText(Data.get(randomMcqNumber.get(0)).location);
+            option4.setText(Data.get(randomMcqNumber.get(1)).location);
+            option2.setText(Data.get(questions.get(questionNumber).index).location);
+            option3.setText(Data.get(randomMcqNumber.get(2)).location);
         }
 
         //event handle of all the options
@@ -112,8 +118,8 @@ public class Quiz extends AppCompatActivity {
                     if(option1.getText().equals(correctAnswer)){
                         //meaning correct option was selected
                         option1.setBackgroundColor(Color.parseColor("#00FF00"));
-                        //increase marks
-                        marksCount++;
+                        //setting boolean true
+                        mcqCorrect = true;
                     }
                     else{
                         //wrong option was selected
@@ -149,7 +155,8 @@ public class Quiz extends AppCompatActivity {
                     if (option2.getText().equals(correctAnswer)) {
                         //meaning correct option was selected
                         option2.setBackgroundColor(Color.parseColor("#00FF00"));
-                        marksCount++;
+                        //setting boolean true
+                        mcqCorrect = true;
                     } else {
                         //wrong option was selected
                         if (option1.getText().equals(correctAnswer)) {
@@ -182,7 +189,8 @@ public class Quiz extends AppCompatActivity {
                     if (option3.getText().equals(correctAnswer)) {
                         //meaning correct option was selected
                         option3.setBackgroundColor(Color.parseColor("#00FF00"));
-                        marksCount++;
+                        //setting boolean true
+                        mcqCorrect = true;
                     } else {
                         //wrong option was selected
                         if (option2.getText().equals(correctAnswer)) {
@@ -215,7 +223,8 @@ public class Quiz extends AppCompatActivity {
                     if (option4.getText().equals(correctAnswer)) {
                         //meaning correct option was selected
                         option4.setBackgroundColor(Color.parseColor("#00FF00"));
-                        marksCount++;
+                        //setting boolean true
+                        mcqCorrect = true;
                     } else {
                         //wrong option was selected
                         if (option2.getText().equals(correctAnswer)) {
@@ -240,6 +249,10 @@ public class Quiz extends AppCompatActivity {
             public void onClick(View v) {
                 //first checking is any option selected or not?
                 if(isAnyOptionSelectedOrNot) {
+                    if(mcqCorrect){
+                        marksCount++;
+                        mcqCorrect = false;
+                    }
                     if(questionNumber< 5){
                         if (questionNumber == 4)
                             submit.setText("Finish");
@@ -317,7 +330,7 @@ public class Quiz extends AppCompatActivity {
         outState.putInt("MarksInt",marksCount); // integer marks count
         outState.putInt("QuestionNumber",questionNumber); // count of question number stored
         outState.putSerializable("questions",questions); //saving the total questions
-
+        outState.putIntegerArrayList("RMN",randomMcqNumber);
 
     }
 
