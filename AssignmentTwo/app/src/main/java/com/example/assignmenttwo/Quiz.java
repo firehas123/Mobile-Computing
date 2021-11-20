@@ -386,14 +386,7 @@ public class Quiz extends AppCompatActivity {
         temp.add(new MyData("م ن","While pronouncing the ending sound of  م  or ن , bring the vibration to the nose")); //14
     }
 }
-class MyData implements Serializable {
-    String word,location;
-    MyData(String wrd,String loc){ //paramenterized constructor
-        this.word=wrd;
-        this.location=loc;
-    }
-    MyData(){} //default constructor
-}
+
 class Question implements Parcelable {
     MyData ob; //question
     int index; //index of arrayList
