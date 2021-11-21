@@ -55,9 +55,7 @@ public class Quiz extends AppCompatActivity {
         option3 = findViewById(R.id.OptionThree);
         option4 = findViewById(R.id.OptionFour);
         submit = findViewById(R.id.Submit);
-                //delete code
-        testing = findViewById(R.id.Testing);
-                // delete code
+
         //removing keyboard from popping up in this activity
         question.setFocusable(false);
         //code start
