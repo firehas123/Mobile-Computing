@@ -14,6 +14,7 @@ public class OptionScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option_screen);
+        // this the screen where user will decide whether he wants ot select exam button option or non exam button option
         //setting on click event for both buttons
         exam = findViewById(R.id.buttonE);
         practise = findViewById(R.id.buttonP);
