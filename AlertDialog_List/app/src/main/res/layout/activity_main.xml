@@ -17,4 +17,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.096" />
+
+    <Button
+        android:id="@+id/btnMulti"
+        android:layout_width="200dp"
+        android:layout_height="62dp"
+        android:text="Multi List"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnList"
+        app:layout_constraintVertical_bias="0.189" />
 </androidx.constraintlayout.widget.ConstraintLayout>
