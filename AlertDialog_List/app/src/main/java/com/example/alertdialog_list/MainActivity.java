@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-
+        //code for mulit list
         findViewById(R.id.btnMulti).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,5 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
     }
 }
