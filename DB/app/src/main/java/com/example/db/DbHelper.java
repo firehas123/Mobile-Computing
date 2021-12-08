@@ -20,7 +20,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public DbHelper(@Nullable Context context) {
         super(context, "studentDB.db", null, 4);
     }
-
+    //testing commit
+    //adding past commit
     @Override
     public void onCreate(SQLiteDatabase db) {
         //String createTableSTatementOne = "CREATE TABLE CustTable(STUDENTID Integer PRIMARY KEY AUTOINCREMENT, " + STUDENT_NAME_FIRST + " Text, STUDENTAge Int, ActiveSTUDENT BOOL) ";
