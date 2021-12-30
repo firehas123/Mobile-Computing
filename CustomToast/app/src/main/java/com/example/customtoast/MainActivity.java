@@ -3,8 +3,12 @@ package com.example.customtoast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
         customToast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(MainActivity.this, "Toast Text", Toast.LENGTH_LONG);
-                toast.show();
+
             }
         });
     }
