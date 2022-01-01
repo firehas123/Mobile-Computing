@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 //Creating the Toast object
                 Toast toast = new Toast(getApplicationContext());
                 toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setGravity(Gravity.CENTER|Gravity.RIGHT, 100  , 200);
                 toast.setView(layout);//setting the view of custom toast layout
                 toast.show();
             }
