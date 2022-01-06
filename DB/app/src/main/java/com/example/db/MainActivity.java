@@ -42,4 +42,3 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
-// lec 1 edn
