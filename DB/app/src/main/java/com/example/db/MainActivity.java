@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,7 +31,13 @@ public class MainActivity extends AppCompatActivity {
         butttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                Toast.makeText(MainActivity.this,"Add Button Clicked",Toast.LENGTH_LONG).show();
+            }
+        });
+        buttonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"Add View Clicked",Toast.LENGTH_LONG).show();
             }
         });
     }
