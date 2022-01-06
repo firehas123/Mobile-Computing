@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         editAge = findViewById(R.id.editTextAge);
         switchisActive = findViewById(R.id.switchisActive);
         listViewDetail = findViewById(R.id.listViewDetails);
-
+        DBHelper db = new DBHelper(this);
         butttonAdd.setOnClickListener(new View.OnClickListener() {
             CustomerModel customerModel;
             @Override
