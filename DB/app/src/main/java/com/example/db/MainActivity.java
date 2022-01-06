@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
             CustomerModel customerModel;
             @Override
             public void onClick(View v) {
-               // Toast.makeText(MainActivity.this,"Add Button Clicked",Toast.LENGTH_LONG).show();
+
                 customerModel = new CustomerModel(editName.getText().toString(),Integer.parseInt(editAge.getText().toString()),switchisActive.isChecked(),1);
-                
+                 Toast.makeText(MainActivity.this,customerModel.toString(),Toast.LENGTH_LONG).show();
             }
         });
         buttonView.setOnClickListener(new View.OnClickListener() {
