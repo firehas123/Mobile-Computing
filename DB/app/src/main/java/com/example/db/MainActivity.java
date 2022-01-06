@@ -29,15 +29,18 @@ public class MainActivity extends AppCompatActivity {
         listViewDetail = findViewById(R.id.listViewDetails);
 
         butttonAdd.setOnClickListener(new View.OnClickListener() {
+            CustomerModel customerModel;
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Add Button Clicked",Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this,"Add Button Clicked",Toast.LENGTH_LONG).show();
+                customerModel = new CustomerModel(editName.getText().toString(),Integer.parseInt(editAge.getText().toString()),switchisActive.isChecked(),1);
+                
             }
         });
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Add View Clicked",Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this,"Add View Clicked",Toast.LENGTH_LONG).show();
             }
         });
     }
