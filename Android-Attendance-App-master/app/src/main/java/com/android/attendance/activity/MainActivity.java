@@ -13,7 +13,8 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	Button start;
-
+	//main changed by hasan
+	// some changes are required
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
